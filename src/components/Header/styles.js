@@ -1,9 +1,9 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  height: 150px;
+  height: 160px;
   text-align: center;
-  background: teal;
+  background: #76ABAE;
 `;
 
 export const Header = styled.h1``;

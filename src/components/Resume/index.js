@@ -14,13 +14,20 @@ const Resume = ({ income, expense, total }) => {
         title="Entradas"
         Icon={FaRegArrowAltCircleUp}
         value={income}
+        color="green" 
       />
       <ResumeItem
         title="Saídas"
         Icon={FaRegArrowAltCircleDown}
         value={expense}
+        color="red"  
       />
-      <ResumeItem title="Total" Icon={FaDollarSign} value={total} />
+      <ResumeItem
+        title="Total"
+        Icon={FaDollarSign}
+        value={total}
+        color="blue"  
+      />
     </C.Container>
   );
 };
