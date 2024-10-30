@@ -1,20 +1,30 @@
 // src/components/Register/Register.js
 import React, { useState } from "react";
-import { Container, Form, Input, Button, LinkButton } from "./styles"; // Importando os estilos
-import { auth } from "../../firebase"; // Importe o auth corretamente
+import { Container, Form, Input, Button, LinkButton, Error } from "./styles"; 
+import { auth, firestore } from "../../firebase"; // Certifique-se de importar o Firestore
 
 const Register = ({ handleRegister, goToLogin }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await auth.createUserWithEmailAndPassword(email, password); // Utilize o auth aqui
+      const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+      const user = userCredential.user; // Obter o usuário registrado
+      
+      // Criar uma nova coleção no Firestore usando o UID do usuário
+      await firestore.collection("users").doc(user.uid).set({
+        email: email,
+        // Adicione outros dados que você deseja salvar para o usuário aqui
+      });
+
       handleRegister(email, password); // Notifique o App que o registro foi feito
-      goToLogin(); // Chame a função para ir à tela de login
+      goToLogin(); // Redirecione para a tela de login
     } catch (error) {
-      console.error("Erro ao registrar:", error.message);
+      console.error("Erro ao registrar:", error);
+      setError("Erro ao registrar. Verifique suas credenciais.");
     }
   };
 
@@ -22,6 +32,7 @@ const Register = ({ handleRegister, goToLogin }) => {
     <Container>
       <h2>Registrar</h2>
       <Form onSubmit={handleSubmit}>
+        {error && <Error>{error}</Error>}
         <Input
           type="email"
           placeholder="Email"

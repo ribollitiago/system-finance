@@ -4,35 +4,57 @@ import GlobalStyle from "./styles/global";
 import Header from "./components/Header";
 import Resume from "./components/Resume";
 import Form from "./components/Form";
-import Register from "./components/Register/index.js";
+import Register from "./components/Register/index.js"; 
 import Login from "./components/Login/index.js";
-import { auth } from "./firebase"; // Importe a configuração do Firebase
+import { auth, firestore } from "./firebase";
 
 const App = () => {
-  const data = localStorage.getItem("transactions");
-  const [transactionsList, setTransactionsList] = useState(
-    data ? JSON.parse(data) : []
-  );
+  const [transactionsList, setTransactionsList] = useState([]);
   const [income, setIncome] = useState(0);
   const [expense, setExpense] = useState(0);
   const [total, setTotal] = useState(0);
   const [isRegistered, setIsRegistered] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [loading, setLoading] = useState(true); // Estado para controle de carregamento
+  const [loading, setLoading] = useState(true);
+  const [userData, setUserData] = useState(null);
+  const [showRegister, setShowRegister] = useState(false); 
 
   useEffect(() => {
-    // Verifica o estado de autenticação do usuário
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        setIsLoggedIn(true); // Usuário está logado
+        setIsLoggedIn(true);
       } else {
-        setIsLoggedIn(false); // Usuário não está logado
+        setIsLoggedIn(false);
       }
-      setLoading(false); // Atualiza o estado de carregamento após verificar o usuário
+      setLoading(false);
     });
 
-    return () => unsubscribe(); // Limpa o listener ao desmontar o componente
+    return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (isLoggedIn) {
+        const user = auth.currentUser;
+        if (user) {
+          const userDoc = await firestore.collection('users').doc(user.uid).get();
+          if (userDoc.exists) {
+            const userData = userDoc.data();
+            console.log('Dados do usuário:', userData);
+            setUserData(userData);
+            // Carrega as transações do Firestore
+            if (userData.transactions) {
+              setTransactionsList(userData.transactions);
+            }
+          } else {
+            console.log('Nenhum dado encontrado para este usuário');
+          }
+        }
+      }
+    };
+
+    fetchUserData();
+  }, [isLoggedIn]);
 
   useEffect(() => {
     const amountExpense = transactionsList
@@ -56,50 +78,62 @@ const App = () => {
   const handleAdd = (transaction) => {
     const newArrayTransactions = [...transactionsList, transaction];
     setTransactionsList(newArrayTransactions);
-    localStorage.setItem("transactions", JSON.stringify(newArrayTransactions));
+
+    // Atualiza as transações no Firestore
+    if (userData) {
+      firestore.collection('users').doc(userData.uid).update({
+        transactions: firestore.FieldValue.arrayUnion(transaction),
+      });
+    }
   };
 
   const handleRegister = (email, password) => {
     console.log("Registrando usuário com:", email, password);
-    setIsRegistered(true); // Redireciona para a tela de login
+    setIsRegistered(true);
   };
 
   const handleLogin = () => {
-    setIsLoggedIn(true); // Redireciona para a tela principal após login
+    setIsLoggedIn(true);
   };
 
   const handleLogout = async () => {
     try {
-      await auth.signOut(); // Desloga o usuário
-      setIsLoggedIn(false); // Atualiza o estado para refletir que o usuário está deslogado
-      setIsRegistered(false); // Reseta o registro, se necessário
+      await auth.signOut();
+      setIsLoggedIn(false);
+      setIsRegistered(false);
+      setUserData(null);
     } catch (error) {
       console.error("Erro ao deslogar:", error.message);
     }
   };
 
-  // Se ainda está carregando, retorne um carregador ou nada
+  const toggleRegister = () => {
+    setShowRegister((prev) => !prev);
+  };
+
   if (loading) {
-    return <div>Loading...</div>; // Pode ser substituído por um componente de carregamento mais estilizado
+    return <div>Loading...</div>;
   }
 
   return (
     <>
       {!isLoggedIn ? (
-        !isRegistered ? (
-          <Register handleRegister={handleRegister} goToLogin={() => setIsRegistered(true)} />
+        showRegister ? (
+          <Register handleRegister={handleRegister} goToLogin={toggleRegister} />
         ) : (
-          <Login handleLogin={handleLogin} goToRegister={() => setIsRegistered(false)} />
+          <Login handleLogin={handleLogin} goToRegister={toggleRegister} />
         )
       ) : (
         <>
-          <Header onLogout={handleLogout} /> {/* Passa a função de logout */}
+          <Header onLogout={handleLogout} />
           <Resume income={income} expense={expense} total={total} />
           <Form
             handleAdd={handleAdd}
             transactionsList={transactionsList}
             setTransactionsList={setTransactionsList}
+            userData={userData} // Passa os dados do usuário para o Form
           />
+          {userData && <div>Bem-vindo, {userData.email}</div>}
         </>
       )}
       <GlobalStyle />

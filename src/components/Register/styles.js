@@ -36,3 +36,8 @@ export const LinkButton = styled.button`
   border: none;
   cursor: pointer;
 `;
+
+export const Error = styled.button`
+  color: "red";
+  fontSize: "0.9rem";
+`;

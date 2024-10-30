@@ -6,9 +6,9 @@ const ResumeItem = ({ title, Icon, value, color }) => {
     <C.Container>
       <C.Header>
         <C.HeaderTitle>{title}</C.HeaderTitle>
-        <Icon color={color} />  {/* Passa a cor do ícone */}
+        <Icon color={color} />
       </C.Header>
-      <C.Total>{value}</C.Total>  {/* Certifique-se de usar "Total", que é exportado corretamente */}
+      <C.Total>{value}</C.Total>  {/* Aqui deve estar o valor */}
     </C.Container>
   );
 };
