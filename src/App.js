@@ -1,4 +1,3 @@
-// src/App.js
 import React, { useEffect, useState } from "react";
 import GlobalStyle from "./styles/global";
 import Header from "./components/Header";
@@ -21,11 +20,7 @@ const App = () => {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        setIsLoggedIn(true);
-      } else {
-        setIsLoggedIn(false);
-      }
+      setIsLoggedIn(!!user); // Atualiza isLoggedIn com base na existência do usuário
       setLoading(false);
     });
 
@@ -67,7 +62,6 @@ const App = () => {
 
     const expense = amountExpense.reduce((acc, cur) => acc + cur, 0).toFixed(2);
     const income = amountIncome.reduce((acc, cur) => acc + cur, 0).toFixed(2);
-
     const total = Math.abs(income - expense).toFixed(2);
 
     setIncome(`R$ ${income}`);
@@ -90,6 +84,7 @@ const App = () => {
   const handleRegister = (email, password) => {
     console.log("Registrando usuário com:", email, password);
     setIsRegistered(true);
+    // Lógica adicional, como redirecionamento após o registro, pode ser adicionada aqui
   };
 
   const handleLogin = () => {
@@ -117,6 +112,7 @@ const App = () => {
 
   return (
     <>
+      {isRegistered && <div>Registro bem-sucedido!</div>}
       {!isLoggedIn ? (
         showRegister ? (
           <Register handleRegister={handleRegister} goToLogin={toggleRegister} />
