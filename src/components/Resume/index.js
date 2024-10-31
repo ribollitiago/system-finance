@@ -14,6 +14,14 @@ const Resume = () => {
   const [expense, setExpense] = useState(0);
   const [total, setTotal] = useState(0);
 
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    }).format(value);
+  };
+  
+
   useEffect(() => {
     const userId = auth.currentUser?.uid; // Resgata o UID do usuário autenticado
     if (!userId) return; // Retorna se não houver usuário autenticado
@@ -80,19 +88,19 @@ const Resume = () => {
       <ResumeItem
         title="Entradas"
         Icon={FaRegArrowAltCircleUp}
-        value={income} // Passa o valor atualizado
+        value={formatCurrency(income)} // Passa o valor atualizado
         color="green" 
       />
       <ResumeItem
         title="Saídas"
         Icon={FaRegArrowAltCircleDown}
-        value={expense} // Passa o valor atualizado
+        value={formatCurrency(expense)} // Passa o valor atualizado
         color="red"  
       />
       <ResumeItem
         title="Total"
         Icon={FaDollarSign}
-        value={total} // Passa o valor atualizado
+        value={formatCurrency(total)} // Passa o valor atualizado
         color="blue"  
       />
     </C.Container>
