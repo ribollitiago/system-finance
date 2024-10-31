@@ -10,6 +10,14 @@ const GridItem = ({ item, onDelete }) => {
   // Ajuste a data para evitar problemas de fuso horário
   const formattedDate = new Date(item.date + 'T00:00:00-03:00').toLocaleDateString("pt-BR");
 
+// Função para confirmar a exclusão
+const handleDelete = () => {
+  const confirmed = window.confirm("Tem certeza que deseja remover este item?");
+  if (confirmed) {
+    onDelete(item.id); // Se confirmado, executa a função de exclusão
+  }
+};
+
   return (
     <C.Tr>
       <C.Td>{item.desc}</C.Td>
@@ -23,7 +31,7 @@ const GridItem = ({ item, onDelete }) => {
         )}
       </C.Td>
       <C.Td alignCenter>
-        <FaTrash onClick={() => onDelete(item.id)} />
+        <FaTrash onClick={handleDelete} />
       </C.Td>
     </C.Tr>
   );
