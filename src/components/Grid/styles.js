@@ -2,11 +2,12 @@ import styled from "styled-components";
 
 export const Table = styled.table`
   width: 98%;
-  background-color: #31363F;
+  background-color: #28303B;
   padding: 20px;
-  border-radius: 0px;
+  border-radius: 0px 0px 20px 20px;
   max-width: 1120px;
   margin: 0px auto;
+  margin-bottom: 50px;
 `;
 
 export const Thead = styled.thead``;

@@ -1,4 +1,3 @@
-// src/components/Register/styles.js
 import styled from "styled-components";
 
 export const Container = styled.div`
@@ -6,6 +5,20 @@ export const Container = styled.div`
   margin: auto;
   padding: 2rem;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+`;
+
+export const FloatingBlock = styled.div`
+  background-color: #222831;
+  padding: 50px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 `;
 
 export const Form = styled.form`
@@ -18,12 +31,14 @@ export const Input = styled.input`
   padding: 10px;
   border-radius: 5px;
   border: 1px solid #ddd;
+  width: 100%;
+  width: 400px;
 `;
 
 export const Button = styled.button`
   padding: 10px;
   color: #fff;
-  background-color: #007bff;
+  background-color: #76ABAE;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -31,13 +46,14 @@ export const Button = styled.button`
 
 export const LinkButton = styled.button`
   padding: 10px;
-  color: #007bff;
+  color: #76ABAE;
   background-color: transparent;
   border: none;
   cursor: pointer;
 `;
 
 export const Error = styled.button`
-  color: "red";
-  fontSize: "0.9rem";
+  color: red;
+  font-size: 0.9rem;
 `;
+

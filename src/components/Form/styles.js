@@ -4,7 +4,7 @@ export const Container = styled.div`
   max-width: 1120px;
   margin: 0px auto;
   width: 98%;
-  background-color: #31363F;
+  background-color: #28303B;
   border-radius: 0px;
   display: flex;
   justify-content: space-around;

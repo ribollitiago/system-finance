@@ -4,8 +4,8 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #31363F;
-  border-radius: 0px;
+  background-color: #28303B;
+  border-radius: 20px 20px 0px 0px;
   padding: 5px 15px;
   width: 30%;
 
@@ -37,7 +37,7 @@ export const Header = styled.header`
   svg {
     width: 25px;
     height: 25px;
-    color: ${({ color }) => color};  // Aplicar a cor ao ícone
+    color: ${({ color }) => color}; 
   }
 `;
 

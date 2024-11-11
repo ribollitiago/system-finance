@@ -6,8 +6,8 @@ import {
   FaRegArrowAltCircleDown,
   FaDollarSign,
 } from "react-icons/fa";
-import { firestore } from "../../firebase"; // Certifique-se de importar seu Firestore
-import { auth } from "../../firebase"; // Importa o auth para pegar o UID do usuário
+import { firestore } from "../../firebase"; 
+import { auth } from "../../firebase"; 
 
 const Resume = () => {
   const [income, setIncome] = useState(0);
@@ -23,10 +23,9 @@ const Resume = () => {
   
 
   useEffect(() => {
-    const userId = auth.currentUser?.uid; // Resgata o UID do usuário autenticado
-    if (!userId) return; // Retorna se não houver usuário autenticado
+    const userId = auth.currentUser?.uid;
+    if (!userId) return; 
 
-    // Escuta as alterações na subcoleção de transações
     const unsubscribe = firestore
       .collection('users')
       .doc(userId)
@@ -37,22 +36,18 @@ const Resume = () => {
           ...doc.data()
         }));
 
-        console.log("Transações recuperadas:", transactionsData); // Log para verificar as transações
-
-        // Verifica se existem transações
+        console.log("Transações recuperadas:", transactionsData); 
         if (transactionsData.length === 0) {
           console.log("Nenhuma transação encontrada.");
-          // Reseta os valores para zero
           setIncome(0);
           setExpense(0);
           setTotal(0);
-          return; // Retorna se não houver transações
+          return; 
         }
 
-        // Calcula entradas e saídas
         const totalIncome = transactionsData.reduce((acc, item) => {
-          console.log(`Item: ${JSON.stringify(item)}`); // Mostra o item atual
-          if (item.expense === false) { // Verifica se é uma entrada
+          console.log(`Item: ${JSON.stringify(item)}`); 
+          if (item.expense === false) { 
             console.log(`Adicionando entrada: ${item.amount}`);
             return acc + (item.amount || 0);
           }
@@ -60,26 +55,22 @@ const Resume = () => {
         }, 0);
 
         const totalExpense = transactionsData.reduce((acc, item) => {
-          if (item.expense === true) { // Verifica se é uma saída
+          if (item.expense === true) { 
             console.log(`Adicionando saída: ${item.amount}`);
             return acc + (item.amount || 0);
           }
           return acc;
         }, 0);
 
-        // Log dos totais
         console.log("Total de Entradas:", totalIncome);
         console.log("Total de Saídas:", totalExpense);
 
-        // Atualiza os estados
         setIncome(totalIncome);
         setExpense(totalExpense);
-        setTotal(totalIncome - totalExpense); // Calcula o total
+        setTotal(totalIncome - totalExpense); 
       }, (error) => {
         console.error("Erro ao escutar transações:", error.message);
       });
-
-    // Limpa a assinatura quando o componente é desmontado
     return () => unsubscribe();
   }, []);
 
@@ -88,19 +79,19 @@ const Resume = () => {
       <ResumeItem
         title="Entradas"
         Icon={FaRegArrowAltCircleUp}
-        value={formatCurrency(income)} // Passa o valor atualizado
+        value={formatCurrency(income)} 
         color="green" 
       />
       <ResumeItem
         title="Saídas"
         Icon={FaRegArrowAltCircleDown}
-        value={formatCurrency(expense)} // Passa o valor atualizado
+        value={formatCurrency(expense)} 
         color="red"  
       />
       <ResumeItem
         title="Total"
         Icon={FaDollarSign}
-        value={formatCurrency(total)} // Passa o valor atualizado
+        value={formatCurrency(total)} 
         color="blue"  
       />
     </C.Container>

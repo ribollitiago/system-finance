@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import styled from "styled-components"; 
 import GlobalStyle from "./styles/global";
 import Header from "./components/Header";
 import Resume from "./components/Resume";
@@ -6,6 +7,16 @@ import Form from "./components/Form";
 import Register from "./components/Register/index.js"; 
 import Login from "./components/Login/index.js";
 import { auth, firestore } from "./firebase";
+
+const Footer = styled.div`
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  text-align: left;
+  padding: 10px;
+  background-color: #191D24; 
+  color: #fff; 
+`;
 
 const App = () => {
   const [transactionsList, setTransactionsList] = useState([]);
@@ -16,11 +27,11 @@ const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
-  const [showRegister, setShowRegister] = useState(false); 
+  const [showRegister, setShowRegister] = useState(false);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      setIsLoggedIn(!!user); // Atualiza isLoggedIn com base na existência do usuário
+      setIsLoggedIn(!!user);
       setLoading(false);
     });
 
@@ -37,7 +48,6 @@ const App = () => {
             const userData = userDoc.data();
             console.log('Dados do usuário:', userData);
             setUserData(userData);
-            // Carrega as transações do Firestore
             if (userData.transactions) {
               setTransactionsList(userData.transactions);
             }
@@ -73,7 +83,6 @@ const App = () => {
     const newArrayTransactions = [...transactionsList, transaction];
     setTransactionsList(newArrayTransactions);
 
-    // Atualiza as transações no Firestore
     if (userData) {
       firestore.collection('users').doc(userData.uid).update({
         transactions: firestore.FieldValue.arrayUnion(transaction),
@@ -84,7 +93,6 @@ const App = () => {
   const handleRegister = (email, password) => {
     console.log("Registrando usuário com:", email, password);
     setIsRegistered(true);
-    // Lógica adicional, como redirecionamento após o registro, pode ser adicionada aqui
   };
 
   const handleLogin = () => {
@@ -127,9 +135,9 @@ const App = () => {
             handleAdd={handleAdd}
             transactionsList={transactionsList}
             setTransactionsList={setTransactionsList}
-            userData={userData} // Passa os dados do usuário para o Form
+            userData={userData}
           />
-          {userData && <div>Bem-vindo, {userData.email}</div>}
+          {userData && <Footer>Bem-vindo, {userData.email}</Footer>}
         </>
       )}
       <GlobalStyle />

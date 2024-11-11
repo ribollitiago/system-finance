@@ -7,21 +7,24 @@ import {
 } from "react-icons/fa";
 
 const GridItem = ({ item, onDelete }) => {
-  // Ajuste a data para evitar problemas de fuso horário
   const formattedDate = new Date(item.date + 'T00:00:00-03:00').toLocaleDateString("pt-BR");
 
-// Função para confirmar a exclusão
-const handleDelete = () => {
-  const confirmed = window.confirm("Tem certeza que deseja remover este item?");
-  if (confirmed) {
-    onDelete(item.id); // Se confirmado, executa a função de exclusão
-  }
-};
+  // Função para formatar o valor com R$
+  const formatValue = (value) => {
+    return `R$ ${value.toFixed(2).replace('.', ',')}`; // Exemplo: R$ 1.234,56
+  };
+
+  const handleDelete = () => {
+    const confirmed = window.confirm("Tem certeza que deseja remover este item?");
+    if (confirmed) {
+      onDelete(item.id);
+    }
+  };
 
   return (
     <C.Tr>
       <C.Td>{item.desc}</C.Td>
-      <C.Td>{item.amount.toFixed(2).replace('.', ',')}</C.Td> {/* Formatação do valor */}
+      <C.Td>{formatValue(item.amount)}</C.Td> {/* Exibe o valor com R$ */}
       <C.Td>{formattedDate}</C.Td> {/* Formatação da data */}
       <C.Td alignCenter>
         {item.expense ? (

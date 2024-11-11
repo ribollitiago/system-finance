@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import Grid from "../Grid";
 import * as C from "./styles";
-import { firestore } from "../../firebase"; // Importa o Firestore
-import { auth } from "../../firebase"; // Importa o auth para pegar o UID do usuário
+import { firestore } from "../../firebase"; 
+import { auth } from "../../firebase";
 
 const Form = ({ transactionsList, setTransactionsList }) => {
   const [desc, setDesc] = useState("");
   const [amount, setAmount] = useState("");
   const [isExpense, setExpense] = useState(false);
-  const [date, setDate] = useState(""); // Novo estado para a data
+  const [date, setDate] = useState("");
 
   const handleSave = async () => {
-    if (!desc || !amount || !date) { // Verifica se todos os campos estão preenchidos
+    if (!desc || !amount || !date) { 
       alert("Informe a descrição, o valor e a data!");
       return;
     } else if (amount < 1) {
@@ -21,28 +21,25 @@ const Form = ({ transactionsList, setTransactionsList }) => {
 
     const transaction = {
       desc: desc,
-      amount: Number(amount), // Certifique-se de armazenar o valor como número
+      amount: Number(amount),
       expense: isExpense,
-      date: date, // Inclui a data na transação
+      date: date, 
     };
 
     try {
-      const userId = auth.currentUser.uid; // Resgata o UID do usuário autenticado
+      const userId = auth.currentUser.uid; 
 
-      // Adiciona a transação ao Firestore na subcoleção de transações do usuário
       await firestore
         .collection('users')
         .doc(userId)
         .collection('transactions')
         .add(transaction);
 
-      // Atualiza a lista de transações localmente
-      setTransactionsList(prev => [...prev, { ...transaction, id: new Date().getTime() }]); // Adiciona um ID gerado pela data
+      setTransactionsList(prev => [...prev, { ...transaction, id: new Date().getTime() }]);
 
-      // Limpa os campos após adicionar
       setDesc("");
       setAmount("");
-      setDate(""); // Limpa o campo de data
+      setDate(""); 
     } catch (error) {
       console.error("Erro ao adicionar a transação:", error.message);
     }
@@ -67,7 +64,7 @@ const Form = ({ transactionsList, setTransactionsList }) => {
           <C.Label>Data</C.Label>
           <C.Input
             value={date}
-            type="date" // Campo de entrada de tipo data
+            type="date" 
             onChange={(e) => setDate(e.target.value)}
           />
         </C.InputContent>
@@ -77,14 +74,14 @@ const Form = ({ transactionsList, setTransactionsList }) => {
             id="rIncome"
             defaultChecked
             name="group1"
-            onChange={() => setExpense(false)} // Define como entrada
+            onChange={() => setExpense(false)}
           />
           <C.Label htmlFor="rIncome">Entrada</C.Label>
           <C.Input
             type="radio"
             id="rExpenses"
             name="group1"
-            onChange={() => setExpense(true)} // Define como saída
+            onChange={() => setExpense(true)} 
           />
           <C.Label htmlFor="rExpenses">Saída</C.Label>
         </C.RadioGroup>

@@ -1,38 +1,29 @@
-// src/components/Header/Header.js
 import React from "react";
 import * as C from "./styles";
-import { auth } from "../../firebase"; // Importe o auth configurado
+import { auth } from "../../firebase"; 
 
 const Header = ({ onLogout }) => {
   const handleLogout = async () => {
-    try {
-      await auth.signOut(); // Desloga o usuário
-      onLogout(); // Notifica o App que o usuário foi deslogado
-    } catch (error) {
-      console.error("Erro ao deslogar:", error.message);
+    const confirmLogout = window.confirm("Tem certeza que deseja deslogar?");
+    
+    if (confirmLogout) {
+      try {
+        await auth.signOut(); 
+        onLogout(); 
+      } catch (error) {
+        console.error("Erro ao deslogar:", error.message);
+      }
     }
   };
 
   return (
     <C.Container>
       <C.Title>Controle Financeiro</C.Title>
-      <button onClick={handleLogout} style={styles.logoutButton}>
-        Logout
-      </button>
+      <C.LogoutButton onClick={handleLogout}>
+        Sair do sistema
+      </C.LogoutButton>
     </C.Container>
   );
-};
-
-const styles = {
-  logoutButton: {
-    marginTop: "20px", // Adiciona espaço entre o título e o botão
-    padding: "10px 15px",
-    color: "#fff",
-    backgroundColor: "#dc3545", // Cor do botão de logout
-    border: "none",
-    borderRadius: "5px",
-    cursor: "pointer",
-  },
 };
 
 export default Header;
