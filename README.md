@@ -1,6 +1,7 @@
 # Projeto de Gestão de Transações Financeiras
 
-Este projeto é um sistema web desenvolvido em React, utilizando Firebase como banco de dados. O objetivo é gerenciar as transações financeiras dos usuários de forma eficiente
+Este projeto é um sistema web desenvolvido em React, utilizando Firebase como banco de dados. O objetivo é gerenciar as transações financeiras dos usuários de forma eficiente.
+
 **🔗 [Acesse o Sistema](https://systemfinance.netlify.app/)**
 
 ## Construído com
