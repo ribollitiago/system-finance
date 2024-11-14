@@ -12,8 +12,8 @@ Este projeto é um sistema web desenvolvido em React, utilizando Firebase como b
 
 ## Configuração do Ambiente
 
-* Node.js: Versão mais recente.
-* NPM ou Yarn: Gerenciador de pacotes.
+* **Node.js:** Versão mais recente.
+* **NPM ou Yarn:** Gerenciador de pacotes.
 
 ### Passos para Configurar o Ambiente
 
