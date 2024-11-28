@@ -99,6 +99,7 @@ O banco de dados do projeto utiliza [Firebase Authentication](https://firebase.g
             "transactions": {
                 "ALbEaQieqpR3PPyQ6DR2h1fRpX21": {
                     "amount": 1200,
+                    "category": "Roupas",
                     "date": "2024-11-02",
                     "desc": "Salário",
                     "expense": false
