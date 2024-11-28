@@ -23,9 +23,10 @@ const GridItem = ({ item, onDelete }) => {
 
   return (
     <C.Tr>
-      <C.Td>{item.desc}</C.Td>
-      <C.Td>{formatValue(item.amount)}</C.Td> {/* Exibe o valor com R$ */}
-      <C.Td>{formattedDate}</C.Td> {/* Formatação da data */}
+      <C.Td alignCenter>{item.desc}</C.Td>
+      <C.Td alignCenter>{formatValue(item.amount)}</C.Td> {/* Exibe o valor com R$ */}
+      <C.Td alignCenter>{formattedDate}</C.Td> {/* Formatação da data */}
+      <C.Td alignCenter>{item.category}</C.Td> {/* Exibe a categoria */}
       <C.Td alignCenter>
         {item.expense ? (
           <FaRegArrowAltCircleDown color="red" />

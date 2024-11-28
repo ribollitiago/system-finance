@@ -53,9 +53,10 @@ const Grid = () => {
     <C.Table>
       <C.Thead>
         <C.Tr>
-          <C.Th width={30}>Descrição</C.Th>
-          <C.Th width={30}>Valor</C.Th>
-          <C.Th width={20} alignCenter>Data</C.Th> {/* Nova coluna para a data */}
+          <C.Th width={20} alignCenter>Descrição</C.Th>
+          <C.Th width={20} alignCenter>Valor</C.Th>
+          <C.Th width={20} alignCenter>Data</C.Th> {/* Coluna para a Data */}
+          <C.Th width={20} alignCenter>Categoria</C.Th> {/* Nova coluna para Categoria */}
           <C.Th width={10} alignCenter>Tipo</C.Th>
           <C.Th width={10}></C.Th>
         </C.Tr>

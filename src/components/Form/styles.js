@@ -51,3 +51,12 @@ export const Button = styled.button`
   color: white;
   background-color: #76ABAE;
 `;
+
+export const Select = styled.select`
+  outline: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+`;

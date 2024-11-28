@@ -8,43 +8,49 @@ const Form = ({ transactionsList, setTransactionsList }) => {
   const [desc, setDesc] = useState("");
   const [amount, setAmount] = useState("");
   const [isExpense, setExpense] = useState(false);
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState(""); // Novo estado para a data
+  const [category, setCategory] = useState(""); // Estado para a categoria
 
   const handleSave = async () => {
-    if (!desc || !amount || !date) { 
+    if (!desc || !amount || !date) {
       alert("Informe a descrição, o valor e a data!");
       return;
     } else if (amount < 1) {
       alert("O valor tem que ser positivo!");
       return;
+    } else if (!category || category === "") { // Verifica se a categoria não foi selecionada
+      alert("Por favor, selecione uma categoria!");
+      return;
     }
-
+  
     const transaction = {
       desc: desc,
       amount: Number(amount),
       expense: isExpense,
-      date: date, 
+      date: date,
+      category: category,  // Adiciona a categoria na transação
     };
-
+  
     try {
-      const userId = auth.currentUser.uid; 
-
+      const userId = auth.currentUser.uid;
+  
       await firestore
         .collection('users')
         .doc(userId)
         .collection('transactions')
         .add(transaction);
-
+  
       setTransactionsList(prev => [...prev, { ...transaction, id: new Date().getTime() }]);
-
+  
       setDesc("");
       setAmount("");
-      setDate(""); 
+      setDate("");
+      setCategory(""); // Limpa a categoria após a adição
     } catch (error) {
       console.error("Erro ao adicionar a transação:", error.message);
     }
   };
-
+  
   return (
     <>
       <C.Container>
@@ -68,6 +74,25 @@ const Form = ({ transactionsList, setTransactionsList }) => {
             onChange={(e) => setDate(e.target.value)}
           />
         </C.InputContent>
+
+        <C.InputContent>
+          <C.Label>Categoria</C.Label>
+          <C.Select 
+            value={category} 
+            onChange={(e) => setCategory(e.target.value)}
+          >
+            <option value=""></option> {/* Opção padrão */}
+            <option value="Roupas">Vestuário</option>
+            <option value="Alimentação">Alimentação</option>
+            <option value="Transporte">Transporte</option>
+            <option value="Educação">Educação</option>
+            <option value="Saúde">Saúde</option>
+            <option value="Lazer">Lazer</option>
+            <option value="Serviços">Serviços</option>
+            <option value="Outros">Outros</option>
+          </C.Select>
+        </C.InputContent>
+
         <C.RadioGroup>
           <C.Input
             type="radio"
