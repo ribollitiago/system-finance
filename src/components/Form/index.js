@@ -18,8 +18,9 @@ const Form = ({ transactionsList, setTransactionsList }) => {
     } else if (amount < 1) {
       alert("O valor tem que ser positivo!");
       return;
-    } else if (!category || category === "") { // Verifica se a categoria não foi selecionada
-      alert("Por favor, selecione uma categoria!");
+    } else if (isExpense && (!category || category === "")) { 
+      // Categoria é obrigatória apenas se for "Saída"
+      alert("Por favor, selecione uma categoria para o gasto!");
       return;
     }
   
@@ -28,7 +29,7 @@ const Form = ({ transactionsList, setTransactionsList }) => {
       amount: Number(amount),
       expense: isExpense,
       date: date,
-      category: category,  // Adiciona a categoria na transação
+      category: isExpense ? category : "N/A", // Define "N/A" para entradas
     };
   
     try {
@@ -75,23 +76,25 @@ const Form = ({ transactionsList, setTransactionsList }) => {
           />
         </C.InputContent>
 
-        <C.InputContent>
-          <C.Label>Categoria</C.Label>
-          <C.Select 
-            value={category} 
-            onChange={(e) => setCategory(e.target.value)}
-          >
-            <option value=""></option> {/* Opção padrão */}
-            <option value="Roupas">Vestuário</option>
-            <option value="Alimentação">Alimentação</option>
-            <option value="Transporte">Transporte</option>
-            <option value="Educação">Educação</option>
-            <option value="Saúde">Saúde</option>
-            <option value="Lazer">Lazer</option>
-            <option value="Serviços">Serviços</option>
-            <option value="Outros">Outros</option>
-          </C.Select>
-        </C.InputContent>
+        {isExpense && ( // Campo de categoria aparece apenas para "Saída"
+          <C.InputContent>
+            <C.Label>Categoria</C.Label>
+            <C.Select 
+              value={category} 
+              onChange={(e) => setCategory(e.target.value)}
+            >
+              <option value=""></option> {/* Opção padrão */}
+              <option value="Roupas">Vestuário</option>
+              <option value="Alimentação">Alimentação</option>
+              <option value="Transporte">Transporte</option>
+              <option value="Educação">Educação</option>
+              <option value="Saúde">Saúde</option>
+              <option value="Lazer">Lazer</option>
+              <option value="Serviços">Serviços</option>
+              <option value="Outros">Outros</option>
+            </C.Select>
+          </C.InputContent>
+        )}
 
         <C.RadioGroup>
           <C.Input
